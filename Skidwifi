@@ -2699,11 +2699,21 @@ print("alr")
 print("attack func") 
 
 print("stop tween") 
+print("stop tween")
+
+-- Tạo ScreenGui và các thành phần giao diện người dùng
+local player = game.Players.LocalPlayer
 local ScreenGui = Instance.new("ScreenGui")
 local TextLabel = Instance.new("TextLabel")
 local UIGradient = Instance.new("UIGradient")
-ScreenGui.Parent = game.Players.LocalPlayer:WaitForChild("PlayerGui")
+local ToggleButton = Instance.new("ImageButton")  -- Sử dụng ImageButton
+local menuOpen = true  -- Biến theo dõi trạng thái của menu
+
+-- Thiết lập ScreenGui
+ScreenGui.Parent = player:WaitForChild("PlayerGui")
 ScreenGui.ZIndexBehavior = Enum.ZIndexBehavior.Sibling
+
+-- Thiết lập TextLabel
 TextLabel.Parent = ScreenGui
 TextLabel.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
 TextLabel.BackgroundTransparency = 1.000
@@ -2716,10 +2726,38 @@ TextLabel.Text = "discord.gg/H9q9RuKxqk"
 TextLabel.TextColor3 = Color3.fromRGB(255, 255, 255)
 TextLabel.TextSize = 19.000
 
-UIGradient.Color = ColorSequence.new{ColorSequenceKeypoint.new(0.00, Color3.fromRGB(255, 255, 255)), ColorSequenceKeypoint.new(0.01, Color3.fromRGB(255, 0, 242)), ColorSequenceKeypoint.new(0.16, Color3.fromRGB(59, 200, 251)), ColorSequenceKeypoint.new(0.35, Color3.fromRGB(247, 0, 255)), ColorSequenceKeypoint.new(0.68, Color3.fromRGB(8, 255, 214)), ColorSequenceKeypoint.new(1.00, Color3.fromRGB(114, 187, 255))}
+UIGradient.Color = ColorSequence.new{
+    ColorSequenceKeypoint.new(0.00, Color3.fromRGB(255, 255, 255)),
+    ColorSequenceKeypoint.new(0.01, Color3.fromRGB(255, 0, 242)),
+    ColorSequenceKeypoint.new(0.16, Color3.fromRGB(59, 200, 251)),
+    ColorSequenceKeypoint.new(0.35, Color3.fromRGB(247, 0, 255)),
+    ColorSequenceKeypoint.new(0.68, Color3.fromRGB(8, 255, 214)),
+    ColorSequenceKeypoint.new(1.00, Color3.fromRGB(114, 187, 255))
+}
 UIGradient.Parent = TextLabel
-loadSettings()
 
+-- Thiết lập ImageButton
+ToggleButton.Parent = ScreenGui
+ToggleButton.BackgroundTransparency = 1  -- Đặt nền trong suốt
+ToggleButton.Position = UDim2.new(1, -30, 0, 10)
+ToggleButton.Size = UDim2.new(0, 25, 0, 25)
+ToggleButton.Image = "rbxassetid://99337284191884"  -- ID của hình ảnh
+ToggleButton.ScaleType = Enum.ScaleType.Fit  -- Đảm bảo hình ảnh không bị biến dạng
+
+-- Hàm để bật/tắt menu
+local function ToggleMenu()
+    menuOpen = not menuOpen
+    if menuOpen then
+        TextLabel.Visible = true
+    else
+        TextLabel.Visible = false
+    end
+end
+
+-- Gán sự kiện Click cho ImageButton
+ToggleButton.MouseButton1Click:Connect(ToggleMenu)
+
+-- Tải và thiết lập Fluent
 local Fluent = loadstring(game:HttpGet("https://github.com/dawid-scripts/Fluent/releases/latest/download/main.lua"))()
 
 local Window = Fluent:CreateWindow({
@@ -2733,7 +2771,7 @@ local Window = Fluent:CreateWindow({
 })
 
 local Tabs = {
-	Settings = Window:AddTab({ Title = "Setting", Icon = "" }),
+    Settings = Window:AddTab({ Title = "Setting", Icon = "" }),
     Sh = Window:AddTab({ Title = "Shop", Icon = "" }),
     Main = Window:AddTab({ Title = "Farming", Icon = "" }),
     stack = Window:AddTab({ Title = "Stack Auto Farm", Icon = "" }), 
@@ -2749,9 +2787,10 @@ local Tabs = {
     Ms = Window:AddTab({ Title = "Misc", Icon = "" }),   
     support = Window:AddTab({ Title = "Server Support\n Updated Logs", Icon = "" }),
 }
+
 print("wait tab") 
 
-    local sex = {"KITTGAMING","ENYU_IS_PRO","FUDD10","BIGNEWS","THEGREATACE","SUB2GAMERROBOT_EXP1","STRAWHATMAIME","SUB2OFFICIALNOOBIE","SUB2NOOBMASTER123","SUB2DAIGROCK","AXIORE","TANTAIGAMIMG","STRAWHATMAINE","JCWK","FUDD10_V2","SUB2FER999","MAGICBIS","TY_FOR_WATCHING","STARCODEHEO","STAFFBATTLE","ADMIN_STRENGTH","DRAGONABUSE"}
+local sex = {"KITTGAMING","ENYU_IS_PRO","FUDD10","BIGNEWS","THEGREATACE","SUB2GAMERROBOT_EXP1","STRAWHATMAIME","SUB2OFFICIALNOOBIE","SUB2NOOBMASTER123","SUB2DAIGROCK","AXIORE","TANTAIGAMIMG","STRAWHATMAINE","JCWK","FUDD10_V2","SUB2FER999","MAGICBIS","TY_FOR_WATCHING","STARCODEHEO","STAFFBATTLE","ADMIN_STRENGTH","DRAGONABUSE"}
 
 local function FPSBooster()
     local decalsyeeted = true
@@ -2788,6 +2827,8 @@ local function FPSBooster()
             v.TextureID = 10385902758728957
         end
     end
+end
+
     for _, e in pairs(l:GetChildren()) do
         if e:IsA("BlurEffect") or e:IsA("SunRaysEffect") or e:IsA("ColorCorrectionEffect") or e:IsA("BloomEffect") or e:IsA("DepthOfFieldEffect") then
             e.Enabled = false
